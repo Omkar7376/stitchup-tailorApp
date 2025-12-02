@@ -1,0 +1,22 @@
+const express = require('express');
+const { userRouter } = require('./routes/userRouter');
+const { customerRouter } = require('./routes/customerRouter');
+const { shirtRouter } = require('./routes/shirtRouter');
+const { pantRouter } = require('./routes/pantRouter');
+require('./association')
+
+const app = express();
+
+app.use(express.json());
+
+app.use("/user", userRouter)
+app.use("/customer", customerRouter)
+app.use("/shirt", shirtRouter)
+app.use("/pant", pantRouter)
+//User.sync();
+//User.sync({force : true});
+//User.sync({alter : true});
+
+//sequelize.sync({force:true});
+
+module.exports = app        
