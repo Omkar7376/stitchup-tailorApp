@@ -4,12 +4,12 @@ const { dbConnection, sequelize } = require('./config/dbConnect');
 require('./association')
 require('dotenv').config();
 
-const port = 3000;
+const port = process.env.DB_PORT;
 
 (async () => {
     try {
       await dbConnection();
-      //await sequelize.sync({ force: true });
+      await sequelize.sync({ force: true });
       //await sequelize.sync({ alter: true });
       console.log('Database synchronized successfully.');
   
