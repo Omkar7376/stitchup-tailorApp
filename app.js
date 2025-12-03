@@ -3,11 +3,14 @@ const { userRouter } = require('./routes/userRouter');
 const { customerRouter } = require('./routes/customerRouter');
 const { shirtRouter } = require('./routes/shirtRouter');
 const { pantRouter } = require('./routes/pantRouter');
+const {checkApiKey} = require('./middleware/checkApiKey')
+
 require('./association')
 
 const app = express();
 
 app.use(express.json());
+app.use(checkApiKey)
 
 app.use("/user", userRouter)
 app.use("/customer", customerRouter)
