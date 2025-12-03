@@ -6,7 +6,6 @@ const { sequelize } = require("../config/dbConnect");
 const { Profile } = require("../model/users/profileModel");
 const bcrypt = require("bcrypt");
 const jsonwebtoken = require('jsonwebtoken');
-const { use } = require("react");
 
 /* const insert = async(req,res)=> {
     //const data = User.build({username:"Omkar", email: "omkar@gmail.com"})
