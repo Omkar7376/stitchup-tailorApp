@@ -160,9 +160,12 @@ const login = async (req, res) => {
                 )
 
                 return res.status(200).json({
+                    code: 200,
                     message: "Auth Successful", 
-                    token: token,
-                    userId: user.id,
+                    data: [{
+                        token: token,
+                        userData: user
+                    }]
                 })
                 } else {
                     return res.status(401).json({
