@@ -131,11 +131,11 @@ const createUser = async (req, res) =>{
 
         const { password, ...otherUserFields } = userData;
         const hashedPass = await bcrypt.hash(password, 10)
-        const user = await User.create({
+        const user = await User.create([{
             ...otherUserFields, 
             password: hashedPass
-        })
-        const profile = await Profile.create({userId : user.id})
+        }])
+        const profile = await Profile.create([{userId : user.id}])
         return res.status(201).json({user, profile})
     } catch (e) {
         console.error(e)        
