@@ -221,18 +221,40 @@ const getUserByID = async(req, res) =>{
 
 const updateUser = async(req, res) =>{
     try {
-        const {error} = userSchema.validate(req.body)
-        if(error) return res.status(400).json({message : error.details[0].message})
+        // const {error} = userSchema.validate(req.body)
+        // if(error) return res.status(400).json({message : error.details[0].message})
 
         const user = await User.findByPk(req.params.id)
         if(!user ) return res.status(500).json({error : "user not found"})
 
-        await user.update(req.body);
+        await user.update({
+            username: req.body.username,
+            name: req.body.name,
+            age: req.body.age,
+            email: req.body.email,
+            mob_no: req.body.mob_no,
+            address: req.body.address,
+        });
         return res.status(200).json({msg: "User Updated"})
     } catch(error) {
         console.error(error)
         return res.status(500).json({error : error.message})
     }
+}
+
+const updatePassword = async(req, res) =>{
+    try {
+        const user = await User.findByPk(req.params.id)
+        if(!user ) return res.status(500).json({error : "user not found"})
+
+        const hashedPass = await bcrypt.hash(req.body.password, 10)
+        await user.update({password: hashedPass});
+        
+        return res.status(200).json({msg: "Password Updated"})
+    } catch(error) {
+        console.error(error)
+        return res.status(500).json({error : error.message})
+    }   
 }
 
 const deleteUser = async(req, res) =>{
