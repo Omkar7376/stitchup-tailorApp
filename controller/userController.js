@@ -137,8 +137,21 @@ const createUser = async (req, res) =>{
         })
         const profile = await Profile.create({userId : user.id})
         return res.status(201).json({
-            user: [user], 
-            profile: [profile]}
+            user: [{
+                USER_ID : user.id,
+                USERNAME : user.username,
+                NAME : user.name,
+                AGE : user.age,
+                MOB_NO : user.mob_no,
+                EMAIL : user.email,
+                ADDRESS : user.address,
+                ISACTIVE : user.isActive  
+            }], 
+            profile: [{
+                USER_ID : profile.userId,
+                ID : profile.id,
+                BIO : profile.bio
+            }]}
         )
     } catch (e) {
         console.error(e)        
