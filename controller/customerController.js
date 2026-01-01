@@ -76,7 +76,7 @@ const createCustomer = async(req, res) => {
 
 const getCustomers = async(req, res) => {
     try {
-        const customers = await Customer.findAll(req.body)
+        const customers = await Customer.findAll()
         return res.status(200).json({
             customers : [{
                 ID: customers.id,
