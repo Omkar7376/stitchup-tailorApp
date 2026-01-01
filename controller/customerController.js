@@ -77,15 +77,16 @@ const createCustomer = async(req, res) => {
 const getCustomers = async(req, res) => {
     try {
         const customers = await Customer.findAll()
-        return res.status(200).json(customers.map(c => ({
-            ID: c.id,
-            NAME: c.name,
-            AGE: c.age,
-            GENDER: c.gender,
-            MOB_NO: c.mob_num,
-            ADDRESS: c.address
-          }))
-        );
+        return res.status(200).json({
+            customer: customers.map(c => ({
+                ID: c.id,
+                NAME: c.name,
+                AGE: c.age,
+                GENDER: c.gender,
+                MOB_NO: c.mob_num,
+                ADDRESS: c.address
+            }))
+        });
     } catch(error) {
         console.error(error)
         return res.status(500).json({message : error.message});
