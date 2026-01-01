@@ -77,7 +77,16 @@ const createCustomer = async(req, res) => {
 const getCustomers = async(req, res) => {
     try {
         const customers = await Customer.findAll(req.body)
-        return res.status(200).json(customers)
+        return res.status(200).json({
+            customers : [{
+                ID: customers.id,
+                NAME: customers.name,
+                AGE: customers.age,
+                GENDER: customers.gender,
+                MOB_NO: customers.mob_num,
+                ADDRESS: customers.address
+            }]
+        })
     } catch(error) {
         console.error(error)
         return res.status(500).json({message : error.message});
@@ -87,7 +96,16 @@ const getCustomers = async(req, res) => {
 const getCustomerById = async(req, res) => {
     try {
         const customer = await Customer.findByPk(req.params.id)
-        return res.status(200).json(customer)
+        return res.status(200).json({
+            customer: [{
+                ID: customer.id,
+                NAME: customer.name,
+                AGE: customer.age,
+                GENDER: customer.gender,
+                MOB_NO: customer.mob_num,
+                ADDRESS: customer.address
+            }]
+        })
     } catch(error) {
         console.error(error)
         return res.status(500).json({message : error.message});
