@@ -12,8 +12,12 @@ const createCustomer = async(req, res) => {
 
         const {error} = customerValidation.validate(customerData)
         if(error) return res.status(400).json({message : error.details[0].message})
-            
-        const customer = await Customer.create(customerData, {transaction: t})
+
+        const maxBookno = await Customer.max('bookno', { transaction: t })
+        const nextBookno = (maxBookno || 0) + 1
+        customerData.bookno = nextBookno
+
+        const customer = await Customer.create(customerData, { transaction: t })
 
         const shirtAmount = shirtMeasurement?.amount || 0;
         const pantAmount = pantMeasurement?.amount || 0;
@@ -22,6 +26,8 @@ const createCustomer = async(req, res) => {
         const discount = order.discount || 0;
         const advance = order.advanceAmount || 0;
         const finalAmount = totalAmount - discount - advance;
+
+        
 
         const newOrder = await CustomerOrder.create({
             customerId: customer.id,
@@ -69,8 +75,8 @@ const createCustomer = async(req, res) => {
         });   
     } catch (e) {
         await t.rollback();
-        console.error(error)
-        return res.status(500).json({message : error.message});
+        console.error(e)
+        return res.status(500).json({message : e.message});
     }
 }
 
@@ -99,6 +105,7 @@ const getCustomerById = async(req, res) => {
         return res.status(200).json({
             customer: [{
                 ID: customer.id,
+                BOOKNO: customer.bookno,
                 NAME: customer.name,
                 AGE: customer.age,
                 GENDER: customer.gender,

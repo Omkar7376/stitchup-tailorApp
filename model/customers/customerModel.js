@@ -8,6 +8,11 @@ const Customer = sequelize.define(
             primaryKey: true,
             autoIncrement: true
         },
+        bookno: {
+            type: DataTypes.INTEGER,
+            allowNull: false,
+            unique: true
+        },
         name:{
             type: DataTypes.STRING,
             allowNull: false,
