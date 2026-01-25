@@ -70,7 +70,7 @@ const createCustomer = async(req, res) => {
             message: "Customer and Orders created successfully",
             code: 201,
             customer:[{
-                ID: customer.id,
+                CUSTOMERID: customer.id,
                 BOOKNO: customer.bookno,
                 NAME: customer.name,
                 AGE: customer.age,
@@ -80,7 +80,7 @@ const createCustomer = async(req, res) => {
             
             }],
             order: [{
-                ID: newOrder.id,
+                ORDERID: newOrder.id,
                 CUSTOMER_ID: newOrder.customerId,
                 ORDER_DATE: newOrder.orderDate,
                 DELIVERY_DATE: newOrder.deliveryDate,
