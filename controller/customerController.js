@@ -68,10 +68,20 @@ const createCustomer = async(req, res) => {
         
         return res.status(201).json({
             message: "Customer and Orders created successfully",
-            customer,
-            order: newOrder,
-            shirt,
-            pant
+            code: 201,
+            customer:[{
+                ID: customer.id,
+                BOOKNO: customer.bookno,
+                NAME: customer.name,
+                AGE: customer.age,
+                GENDER: customer.gender,
+                MOB_NO: customer.mob_num,
+                ADDRESS: customer.address
+            
+            }],
+            order: [{...newOrder}],
+            shirt:[{...shirt}],
+            pant:[{...pant}]
         });   
     } catch (e) {
         await t.rollback();
