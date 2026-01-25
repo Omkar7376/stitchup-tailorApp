@@ -79,9 +79,50 @@ const createCustomer = async(req, res) => {
                 ADDRESS: customer.address
             
             }],
-            order: [{...newOrder}],
-            shirt:[{...shirt}],
-            pant:[{...pant}]
+            order: [{
+                ID: newOrder.id,
+                CUSTOMER_ID: newOrder.customerId,
+                ORDER_DATE: newOrder.orderDate,
+                DELIVERY_DATE: newOrder.deliveryDate,
+                ORDER_TYPE: newOrder.orderType,
+                SHIRT_AMOUNT: newOrder.shirtAmount,
+                PANT_AMOUNT: newOrder.pantAmount,
+                TOTAL_AMOUNT: newOrder.totalAmount,
+                DISCOUNT: newOrder.discount,
+                ADVANCE_AMOUNT: newOrder.advanceAmount,
+                FINAL_PAYABLE: newOrder.finalPayable,
+                STATUS: newOrder.status,
+                NOTE: newOrder.note
+            }],
+            shirt:[{
+                SHIRTID: shirt?.id,
+                ORDER_ID: shirt?.orderId,
+                SHIRT_QNT: shirt?.shirtQnt,
+                CHEST: shirt?.chest,
+                LENGTH: shirt?.length,
+                SLEEVE: shirt?.sleeve,
+                SHOULDER: shirt?.shoulder,
+                BACK: shirt?.back,
+                BICEP: shirt?.bicep,
+                CUFF: shirt?.cuff,
+                AMOUNT: shirt?.amount,
+                FRONT1: shirt?.front1,
+                FRONT2: shirt?.front2,
+                FRONT3: shirt?.front3
+            }],
+            pant:[{
+                PANTID: pant?.id,
+                ORDER_ID: pant?.orderId,
+                PANT_QNT: pant?.pantQnt,
+                RISE: pant?.rise,
+                WAIST: pant?.waist,
+                SEAT: pant?.seat,
+                LENGTH: pant?.length,
+                THIGH: pant?.thigh,
+                BOTTOM: pant?.bottom,
+                KNEE: pant?.knee,
+                AMOUNT: pant?.amount
+            }]
         });   
     } catch (e) {
         await t.rollback();

@@ -33,6 +33,15 @@ const ShirtMeasur = sequelize.define(
         collar: {
             type: DataTypes.FLOAT,
         },
+        cuff: {
+            type: DataTypes.FLOAT,
+        },
+        back: {
+            type: DataTypes.FLOAT,
+        },
+        bicep: {
+            type: DataTypes.FLOAT,
+        },
         front1: {
             type: DataTypes.FLOAT,
             allowNull: true

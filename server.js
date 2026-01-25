@@ -10,7 +10,7 @@ const port = process.env.DB_PORT;
     try {
       await dbConnection();
       //await sequelize.sync({ force: true });
-      //await sequelize.sync({ alter: true });
+      await sequelize.sync({ alter: true });
       console.log('Database synchronized successfully.');
   
       const server = http.createServer(app);
