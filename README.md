@@ -14,7 +14,6 @@ This is the backend API for the StitchUp Tailor Management App. It provides REST
 
 ## 🏗️ Architecture
 
-- MVC Pattern
 - REST API Design
 - Middleware-based authentication
 
