@@ -20,7 +20,7 @@ const createCustomer = async(req, res) => {
         const customer = await Customer.create(customerData, { transaction: t })
 
         const shirtQnt = shirtMeasurement?.shirtQnt || 0;
-        const pantQnt = pantMeasurement?.PantQnt || 0;
+        const pantQnt = pantMeasurement?.pantQnt || 0;
         const shirtUnitPrice = shirtMeasurement?.amount || 0;
         const pantUnitPrice = pantMeasurement?.amount || 0;
 
@@ -30,8 +30,6 @@ const createCustomer = async(req, res) => {
         const discount = order?.discount || 0;
         const advance = order?.advanceAmount || 0;
         const finalAmount = Math.max(0, totalAmount - discount - advance);
-
-        
 
         const newOrder = await CustomerOrder.create({
             customerId: customer.id,
