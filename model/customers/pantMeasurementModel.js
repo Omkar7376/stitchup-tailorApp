@@ -12,7 +12,7 @@ const PantMeasur = sequelize.define(
             type: DataTypes.INTEGER,
             allowNull: true,
         },
-        pantQnt:{
+        PantQnt:{
             type: DataTypes.INTEGER,
         },
         amount: {

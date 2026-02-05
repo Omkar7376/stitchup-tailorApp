@@ -4,19 +4,35 @@ const { dbConnection, sequelize } = require('./config/dbConnect');
 require('./association')
 require('dotenv').config();
 
-const port = process.env.DB_PORT;
+// const port = process.env.DB_PORT;
+
+// (async () => {
+//     try {
+//       await dbConnection();
+//       //await sequelize.sync({ force: true });
+//       await sequelize.sync({ alter: true });
+//       console.log('Database synchronized successfully.');
+  
+//       const server = http.createServer(app);
+//       server.listen(port, () => console.log(`Server running on port ${port}`));
+//     } catch (e) {
+//       console.error('Error starting server:', e);
+//     }
+//   })();
+
+const port = process.env.PORT || 5000;
 
 (async () => {
-    try {
-      await dbConnection();
-      //await sequelize.sync({ force: true });
-      await sequelize.sync({ alter: true });
-      console.log('Database synchronized successfully.');
-  
-      const server = http.createServer(app);
-      server.listen(port, () => console.log(`Server running on port ${port}`));
-    } catch (e) {
-      console.error('Error starting server:', e);
-    }
-  })();
-  
+  try {
+    await dbConnection();
+    await sequelize.sync({ alter: true });
+    console.log("Database synchronized successfully.");
+
+    const server = http.createServer(app);
+    server.listen(port, "0.0.0.0", () =>
+      console.log(`Server running on port ${port}`)
+    );
+  } catch (e) {
+    console.error("Error starting server:", e);
+  }
+})();
