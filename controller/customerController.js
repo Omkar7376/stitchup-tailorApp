@@ -19,17 +19,17 @@ const createCustomer = async(req, res) => {
 
         const customer = await Customer.create(customerData, { transaction: t })
 
-        const shirtQnuantity = shirtMeasurement?.shirtQnt || 0;
-        const pantQnuantity = pantMeasurement?.pantQnt || 0;
-        const shirtAmount = shirtMeasurement?.amount || 0;
-        const pantAmount = pantMeasurement?.amount || 0;
+        const shirtQnt = shirtMeasurement?.shirtQnt || 0;
+        const pantQnt = pantMeasurement?.pantQnt || 0;
+        const shirtUnitPrice = shirtMeasurement?.amount || 0;
+        const pantUnitPrice = pantMeasurement?.amount || 0;
 
-        const shirtTotal = shirtQnuantity * shirtAmount;
-        const pantTotal = pantQnuantity * pantAmount;
+        const shirtTotal = shirtQnt * shirtUnitPrice;
+        const pantTotal = pantQnt * pantUnitPrice;
         const totalAmount = shirtTotal + pantTotal;
-        const discount = order.discount || 0;
-        const advance = order.advanceAmount || 0;
-        const finalAmount = totalAmount - discount - advance;
+        const discount = order?.discount || 0;
+        const advance = order?.advanceAmount || 0;
+        const finalAmount = Math.max(0, totalAmount - discount - advance);
 
         
 
@@ -112,7 +112,9 @@ const createCustomer = async(req, res) => {
                 AMOUNT: shirt?.amount,
                 FRONT1: shirt?.front1,
                 FRONT2: shirt?.front2,
-                FRONT3: shirt?.front3
+                FRONT3: shirt?.front3,
+                SHIRT_TOTAL: shirtTotal,
+                UNIT_PRICE: shirtUnitPrice
             }],
             pant:[{
                 PANTID: pant?.id,
@@ -125,7 +127,9 @@ const createCustomer = async(req, res) => {
                 THIGH: pant?.thigh,
                 BOTTOM: pant?.bottom,
                 KNEE: pant?.knee,
-                AMOUNT: pant?.amount
+                AMOUNT: pant?.amount,
+                PANT_TOTAL: pantTotal,
+                UNIT_PRICE: pantUnitPrice
             }]
         });   
     } catch (e) {
