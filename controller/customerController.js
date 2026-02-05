@@ -19,10 +19,14 @@ const createCustomer = async(req, res) => {
 
         const customer = await Customer.create(customerData, { transaction: t })
 
+        const shirtQnuantity = shirtMeasurement?.shirtQnt || 0;
+        const pantQnuantity = pantMeasurement?.pantQnt || 0;
         const shirtAmount = shirtMeasurement?.amount || 0;
         const pantAmount = pantMeasurement?.amount || 0;
 
-        const totalAmount = shirtAmount + pantAmount;
+        const shirtTotal = shirtQnuantity * shirtAmount;
+        const pantTotal = pantQnuantity * pantAmount;
+        const totalAmount = shirtTotal + pantTotal;
         const discount = order.discount || 0;
         const advance = order.advanceAmount || 0;
         const finalAmount = totalAmount - discount - advance;
