@@ -21,11 +21,11 @@ const createCustomer = async(req, res) => {
 
         const shirtQnt = shirtMeasurement?.shirtQnt || 0;
         const pantQnt = pantMeasurement?.pantQnt || 0;
-        const shirtUnitPrice = shirtMeasurement?.amount || 0;
-        const pantUnitPrice = pantMeasurement?.amount || 0;
+        const shirtAmount = shirtMeasurement?.amount || 0;
+        const pantAmount = pantMeasurement?.amount || 0;
 
-        const shirtTotal = shirtQnt * shirtUnitPrice;
-        const pantTotal = pantQnt * pantUnitPrice;
+        const shirtTotal = shirtQnt * shirtAmount;
+        const pantTotal = pantQnt * pantAmount;
         const totalAmount = shirtTotal + pantTotal;
         const discount = order?.discount || 0;
         const advance = order?.advanceAmount || 0;
