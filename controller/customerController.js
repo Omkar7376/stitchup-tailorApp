@@ -20,7 +20,7 @@ const createCustomer = async(req, res) => {
         const customer = await Customer.create(customerData, { transaction: t })
 
         const shirtQnt = shirtMeasurement?.shirtQnt || 0;
-        const pantQnt = pantMeasurement?.pantQnt || 0;
+        const pantQnt = pantMeasurement?.PantQnt || 0;
         const shirtUnitPrice = shirtMeasurement?.amount || 0;
         const pantUnitPrice = pantMeasurement?.amount || 0;
 
