@@ -141,6 +141,7 @@ const getCustomers = async(req, res) => {
         return res.status(200).json({
             customer: customers.map(c => ({
                 ID: c.id,
+                BOOKNO: c.bookno,
                 NAME: c.name,
                 AGE: c.age,
                 GENDER: c.gender,
