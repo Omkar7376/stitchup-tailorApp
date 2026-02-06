@@ -244,11 +244,11 @@ const updateCustomer = async (req, res) => {
         const customer = await Customer.findByPk(req.params.id)
         if (!customer) return res.status(500).json({ error: "Customer not found" })
 
-        await Customer.update({
+        await customer.update({
             name: req.body.name,
             age: req.body.age,
             gender: req.body.gender,
-            mobile: req.body.mob_num,
+            mob_num: req.body.mob_num,
             address: req.body.address
         });
 
