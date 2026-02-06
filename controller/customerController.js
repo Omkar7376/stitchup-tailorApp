@@ -238,7 +238,6 @@ const getCustomerById = async (req, res) => {
 
 const updateCustomer = async (req, res) => {
     try {
-        const { ...customerData } = req.body
         const { error } = customerValidation.validate(req.body)
         if (error) return res.status(400).json({ message: error.details[0].message })
 
@@ -246,14 +245,13 @@ const updateCustomer = async (req, res) => {
         if (!customer) return res.status(500).json({ error: "Customer not found" })
 
         await Customer.update({
-            name: customerData.name,
-            age: customerData.age,
-            gender: customerData.gender,
-            mobile: customerData.mob_num,
-            address: customerData.address
-        }, {
-            where: { id: req.params.id }
-        })
+            name: req.body.name,
+            age: req.body.age,
+            gender: req.body.gender,
+            mobile: req.body.mob_num,
+            address: req.body.address
+        });
+
         res.status(200).json({
             message: "Customer Updated",
             code: 200,
