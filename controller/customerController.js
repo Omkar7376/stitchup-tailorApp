@@ -1,17 +1,17 @@
-const {customerValidation} = require('../middleware/customerValidation')
-const {Customer} = require("../model/customers/customerModel")
+const { customerValidation } = require('../middleware/customerValidation')
+const { Customer } = require("../model/customers/customerModel")
 const { CustomerOrder } = require('../model/customers/ordersModel')
 const { PantMeasur } = require('../model/customers/pantMeasurementModel')
 const { ShirtMeasur } = require('../model/customers/shirtMeasurementModel')
 const { sequelize } = require("../config/dbConnect");
 
-const createCustomer = async(req, res) => {
+const createCustomer = async (req, res) => {
     const t = await sequelize.transaction();
     try {
-        const {shirtMeasurement, pantMeasurement, order, ...customerData} = req.body
+        const { shirtMeasurement, pantMeasurement, order, ...customerData } = req.body
 
-        const {error} = customerValidation.validate(customerData)
-        if(error) return res.status(400).json({message : error.details[0].message})
+        const { error } = customerValidation.validate(customerData)
+        if (error) return res.status(400).json({ message: error.details[0].message })
 
         const maxBookno = await Customer.max('bookno', { transaction: t })
         const nextBookno = (maxBookno || 0) + 1
@@ -37,7 +37,7 @@ const createCustomer = async(req, res) => {
             deliveryDate: order.deliveryDate,
             orderType: order.orderType,
             shirtAmount: shirtTotal,
-            pantAmount: pantTotal,  
+            pantAmount: pantTotal,
             totalAmount: totalAmount,
             discount: discount,
             advanceAmount: advance,
@@ -45,33 +45,33 @@ const createCustomer = async(req, res) => {
             status: order.status,
             note: order.note
         },
-        { transaction: t })
+            { transaction: t })
 
         let shirt = null;
         let pant = null;
 
-        if(shirtMeasurement) {
+        if (shirtMeasurement) {
             shirt = await ShirtMeasur.create({
-                    ...shirtMeasurement,
-                    orderId: newOrder.id
-                },{ transaction: t }
+                ...shirtMeasurement,
+                orderId: newOrder.id
+            }, { transaction: t }
             )
         }
 
-        if(pantMeasurement) {
+        if (pantMeasurement) {
             pant = await PantMeasur.create({
-                    ...pantMeasurement,
-                    orderId: newOrder.id
-                },{ transaction: t }
+                ...pantMeasurement,
+                orderId: newOrder.id
+            }, { transaction: t }
             )
         }
 
         await t.commit();
-        
+
         return res.status(201).json({
             message: "Customer and Orders created successfully",
             code: 201,
-            customer:[{
+            customer: [{
                 CUSTOMERID: customer.id,
                 BOOKNO: customer.bookno,
                 NAME: customer.name,
@@ -79,7 +79,7 @@ const createCustomer = async(req, res) => {
                 GENDER: customer.gender,
                 MOB_NO: customer.mob_num,
                 ADDRESS: customer.address
-            
+
             }],
             order: [{
                 ORDERID: newOrder.id,
@@ -96,7 +96,7 @@ const createCustomer = async(req, res) => {
                 STATUS: newOrder.status,
                 NOTE: newOrder.note
             }],
-            shirt:[{
+            shirt: [{
                 SHIRTID: shirt?.id,
                 ORDER_ID: shirt?.orderId,
                 SHIRT_QNT: shirt?.shirtQnt,
@@ -114,7 +114,7 @@ const createCustomer = async(req, res) => {
                 SHIRT_TOTAL: shirtTotal,
                 UNIT_PRICE: shirtUnitPrice
             }],
-            pant:[{
+            pant: [{
                 PANTID: pant?.id,
                 ORDER_ID: pant?.orderId,
                 PANT_QNT: pant?.pantQnt,
@@ -129,15 +129,15 @@ const createCustomer = async(req, res) => {
                 PANT_TOTAL: pantTotal,
                 UNIT_PRICE: pantUnitPrice
             }]
-        });   
+        });
     } catch (e) {
         await t.rollback();
         console.error(e)
-        return res.status(500).json({message : e.message});
+        return res.status(500).json({ message: e.message });
     }
 }
 
-const getCustomers = async(req, res) => {
+const getCustomers = async (req, res) => {
     try {
         const customers = await Customer.findAll()
         return res.status(200).json({
@@ -151,13 +151,13 @@ const getCustomers = async(req, res) => {
                 ADDRESS: c.address
             }))
         });
-    } catch(error) {
+    } catch (error) {
         console.error(error)
-        return res.status(500).json({message : error.message});
+        return res.status(500).json({ message: error.message });
     }
 }
 
-const getCustomerById = async(req, res) => {
+const getCustomerById = async (req, res) => {
     try {
         const customer = await Customer.findByPk(req.params.id, {
             include: [
@@ -175,10 +175,10 @@ const getCustomerById = async(req, res) => {
         }
         const shirtMeasurements = [];
         const pantMeasurements = [];
-        
-        if(customer.orders && customer.orders.length > 0) {
+
+        if (customer.orders && customer.orders.length > 0) {
             customer.orders.forEach(order => {
-                if(order.shirt) {
+                if (order.shirt) {
                     shirtMeasurements.push({
                         SHIRTID: order.shirt.id,
                         ORDER_ID: order.shirt.orderId,
@@ -197,7 +197,7 @@ const getCustomerById = async(req, res) => {
                         FRONT3: order.shirt.front3
                     });
                 }
-                if(order.Pant) {
+                if (order.Pant) {
                     pantMeasurements.push({
                         PANTID: order.Pant.id,
                         ORDER_ID: order.Pant.orderId,
@@ -216,7 +216,7 @@ const getCustomerById = async(req, res) => {
                 }
             });
         }
-        
+
         return res.status(200).json({
             customer: [{
                 ID: customer.id,
@@ -230,43 +230,62 @@ const getCustomerById = async(req, res) => {
             shirtMeasurements: shirtMeasurements,
             pantMeasurements: pantMeasurements
         })
-    } catch(error) {
-        console.error(error)
-        return res.status(500).json({message : error.message});
-    }
-}
-
-const updateCustomer = async(req, res) => {
-    try {
-        const {error} = customerValidation.validate(req.body)
-        if(error) return res.status(400).json({message : error.details[0].message})
-
-        const customer = await Customer.findByPk(req.params.id)
-        if(!customer) return res.status(500).json({error : "Customer not found"})
-        
-        await Customer.update(req.body, {
-            where: { id: req.params.id}
-        })
-        res.status(200).json({message : "Customer Updated"})
     } catch (error) {
         console.error(error)
-        return res.status(500).json({message : error.message});
+        return res.status(500).json({ message: error.message });
     }
 }
 
-const deleteCustomer = async(req, res) => {
+const updateCustomer = async (req, res) => {
+    try {
+        const { ...customerData } = req.body
+        const { error } = customerValidation.validate(req.body)
+        if (error) return res.status(400).json({ message: error.details[0].message })
+
+        const customer = await Customer.findByPk(req.params.id)
+        if (!customer) return res.status(500).json({ error: "Customer not found" })
+
+        await Customer.update({
+            name: customerData.name,
+            age: customerData.age,
+            gender: customerData.gender,
+            mobile: customerData.mob_num,
+            address: customerData.address
+        }, {
+            where: { id: req.params.id }
+        })
+        res.status(200).json({
+            message: "Customer Updated",
+            code: 200,
+            customer: [{
+                CUSTOMERID: customer.id,
+                BOOKNO: customer.bookno,
+                NAME: customer.name,
+                AGE: customer.age,
+                GENDER: customer.gender,
+                MOB_NO: customer.mob_num,
+                ADDRESS: customer.address
+            }]
+        })
+    } catch (error) {
+        console.error(error)
+        return res.status(500).json({ message: error.message });
+    }
+}
+
+const deleteCustomer = async (req, res) => {
     try {
         const customer = await Customer.findByPk(req.params.id)
-        if(!customer) return res.status(500).json({error : "Customer not found"})
+        if (!customer) return res.status(500).json({ error: "Customer not found" })
 
         await Customer.destroy()
-        return res.status(200).json({message : "Customer Destroid"})  
-    }  catch (error) {
+        return res.status(200).json({ message: "Customer Destroid" })
+    } catch (error) {
         console.error(error)
-        return res.status(500).json({error : error.message})
-    } 
-}  
-    
+        return res.status(500).json({ error: error.message })
+    }
+}
+
 module.exports = {
     createCustomer, getCustomers, getCustomerById, updateCustomer, deleteCustomer
 }
