@@ -159,7 +159,64 @@ const getCustomers = async(req, res) => {
 
 const getCustomerById = async(req, res) => {
     try {
-        const customer = await Customer.findByPk(req.params.id)
+        const customer = await Customer.findByPk(req.params.id, {
+            include: [
+                {
+                    association: "orders",
+                    include: [
+                        { association: "shirt" },
+                        { association: "Pant" }
+                    ]
+                }
+            ]
+        })
+        if (!customer) {
+            return res.status(404).json({ error: "Customer not found" });
+        }
+        const shirtMeasurements = [];
+        const pantMeasurements = [];
+        
+        if(customer.orders && customer.orders.length > 0) {
+            customer.orders.forEach(order => {
+                if(order.shirt) {
+                    shirtMeasurements.push({
+                        SHIRTID: order.shirt.id,
+                        ORDER_ID: order.shirt.orderId,
+                        SHIRT_QNT: order.shirt.shirtQnt,
+                        CHEST: order.shirt.chest,
+                        LENGTH: order.shirt.length,
+                        SLEEVE: order.shirt.sleeve,
+                        SHOULDER: order.shirt.shoulder,
+                        BACK: order.shirt.back,
+                        BICEP: order.shirt.bicep,
+                        CUFF: order.shirt.cuff,
+                        COLLAR: order.shirt.collar,
+                        AMOUNT: order.shirt.amount,
+                        FRONT1: order.shirt.front1,
+                        FRONT2: order.shirt.front2,
+                        FRONT3: order.shirt.front3
+                    });
+                }
+                if(order.Pant) {
+                    pantMeasurements.push({
+                        PANTID: order.Pant.id,
+                        ORDER_ID: order.Pant.orderId,
+                        PANT_QNT: order.Pant.pantQnt,
+                        RISE: order.Pant.rise,
+                        WAIST: order.Pant.waist,
+                        SEAT: order.Pant.seat,
+                        LENGTH: order.Pant.length,
+                        THIGH: order.Pant.thigh,
+                        BOTTOM: order.Pant.bottom,
+                        KNEE: order.Pant.knee,
+                        OUTSIDE_LENGTH: order.Pant.outsideLength,
+                        INSIDE_LENGTH: order.Pant.insideLength,
+                        AMOUNT: order.Pant.amount
+                    });
+                }
+            });
+        }
+        
         return res.status(200).json({
             customer: [{
                 ID: customer.id,
@@ -169,7 +226,9 @@ const getCustomerById = async(req, res) => {
                 GENDER: customer.gender,
                 MOB_NO: customer.mob_num,
                 ADDRESS: customer.address
-            }]
+            }],
+            shirtMeasurements: shirtMeasurements,
+            pantMeasurements: pantMeasurements
         })
     } catch(error) {
         console.error(error)
