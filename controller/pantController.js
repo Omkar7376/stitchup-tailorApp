@@ -1,4 +1,4 @@
-const {pantMeasurValidation} = require("../middleware/pantMeasurValidation");
+const { pantMeasurValidation } = require("../middleware/pantMeasurValidation");
 const { Customer } = require("../model/customers/customerModel");
 const { CustomerOrder } = require("../model/customers/ordersModel");
 const { PantMeasur } = require("../model/customers/pantMeasurementModel");
@@ -6,18 +6,18 @@ const { sequelize } = require("../config/dbConnect");
 const { where, QueryTypes } = require("sequelize");
 const { ShirtMeasur } = require("../model/customers/shirtMeasurementModel");
 
-const createPantMeasur = async(req, res) => {
+const createPantMeasur = async (req, res) => {
     const t = await sequelize.transaction();
-    try{
-        const {customerId, shirtData, pantData, order} = req.body
-        const {error} = pantMeasurValidation.validate(pantData)
-        if(error) return res.status(400).json(req.body, {transaction: t})
+    try {
+        const { customerId, shirtData, pantData, order } = req.body
+        const { error } = pantMeasurValidation.validate(pantData)
+        if (error) return res.status(400).json(req.body, { transaction: t })
 
         let customer
-        if(customerId){
+        if (customerId) {
             customer = await Customer.findByPk(customerId)
-            if(!customer){
-                return res.status(400).json({message: "Customer not found"})
+            if (!customer) {
+                return res.status(400).json({ message: "Customer not found" })
             }
         }
 
@@ -35,7 +35,7 @@ const createPantMeasur = async(req, res) => {
             deliveryDate: order.deliveryDate,
             orderType: order.orderType,
             shirtAmount: shirtAmount,
-            pantAmount: pantAmount,  
+            pantAmount: pantAmount,
             totalAmount: totalAmount,
             discount: discount,
             advanceAmount: advance,
@@ -43,7 +43,7 @@ const createPantMeasur = async(req, res) => {
             status: order.status,
             note: order.note
         },
-        { transaction: t })
+            { transaction: t })
 
         const pant = await PantMeasur.create({
             ...pantData,
@@ -53,15 +53,15 @@ const createPantMeasur = async(req, res) => {
 
         await t.commit();
 
-        return res.status(201).json({customer, pant, order: newOrder})
-    } catch(e) {
+        return res.status(201).json({ customer, pant, order: newOrder })
+    } catch (e) {
         console.error(error)
-        return res.status(500).json({message : error.message});
+        return res.status(500).json({ message: error.message });
     }
 }
 
-const getPantMeasurment = async(req, res) => {
-    try{
+const getPantMeasurment = async (req, res) => {
+    try {
         const customer = await Customer.findAll({
             include: {
                 model: CustomerOrder,
@@ -75,31 +75,40 @@ const getPantMeasurment = async(req, res) => {
         return res.status(200).json(customer)
     } catch (error) {
         console.error(error)
-        return res.status(500).json({message : error.message});
+        return res.status(500).json({ message: error.message });
     }
 }
 
-const getPantMeasumentById = async(req, res) => {
-    try{
+const getPantMeasumentById = async (req, res) => {
+    try {
         const pant = await PantMeasur.findByPk(req.params.id)
         return res.status(200).json(pant)
-    } catch(error) {
+    } catch (error) {
         console.error(error)
-        return res.status(500).json({message : error.message});
+        return res.status(500).json({ message: error.message });
     }
 }
 
-const updatePantMeasurment = async(req, res) => {
-    try{
-        const {error} = pantMeasurValidation.validate(req.body)
-        if(error) return res.status(400).json({message: error.details[0].message})
-        
+const updatePantMeasurment = async (req, res) => {
+    try {
+        const { error } = pantMeasurValidation.validate(req.body)
+        if (error) return res.status(400).json({ message: error.details[0].message })
+
         const pant = await PantMeasur.findByPk(req.params.id)
-        if(!pant) return res.status(404).json({message: "Pant Measurement not found"})
+        if (!pant) return res.status(404).json({ message: "Pant Measurement not found" })
 
-        await pant.update(req.body)
+        await pant.update({
+            outsideLength: req.body.outsideLength,
+            insideLength: req.body.insideLength,
+            rise: req.body.rise,
+            waist: req.body.waist,
+            seat: req.body.seat,
+            thigh: req.body.thigh,
+            knee: req.body.knee,
+            bottom: req.body.bottom
+        });
 
-        const order = await CustomerOrder.findOne({ where: { id: pant.orderId } });
+        /*const order = await CustomerOrder.findOne({ where: { id: pant.orderId } });
         const pantAmount = pant.amount
 
         const shirt = await ShirtMeasur.findOne({ where: { orderId: order.id } });
@@ -112,33 +121,42 @@ const updatePantMeasurment = async(req, res) => {
             shirtAmount,
             totalAmount,
             finalPayable
-        });
+        });*/
 
         return res.status(200).json({
             message: "Measurmenet Updated",
-            pant,
-            order
+            pantMeasurment: [{
+                outsideLength: pant.outsideLength,
+                insideLength: pant.insideLength,
+                rise: pant.rise,
+                waist: pant.waist,
+                seat: pant.seat,
+                thigh: pant.thigh,
+                knee: pant.knee,
+                bottom: pant.bottom
+            }],
+            // order
         })
 
-    } catch(error) {
+    } catch (error) {
         console.error(error)
-        return res.status(500).json({message : error.message});
+        return res.status(500).json({ message: error.message });
     }
 }
 
-const deletePantMeasurment = async(req, res) => {
-    try{
+const deletePantMeasurment = async (req, res) => {
+    try {
         const pant = await PantMeasur.findByPk(req.params.id)
-        if(!pant) return res.status(500).json({error : "Pant not found"})   
+        if (!pant) return res.status(500).json({ error: "Pant not found" })
 
         await pant.destroy()
-        return res.status(200).json({message: "Pant Deleted"})  
-    } catch(error) {
+        return res.status(200).json({ message: "Pant Deleted" })
+    } catch (error) {
         console.error(error)
-        return res.status(500).json({message : error.message});
+        return res.status(500).json({ message: error.message });
     }
 }
 
 module.exports = {
-    createPantMeasur, getPantMeasurment, getPantMeasumentById, updatePantMeasurment, deletePantMeasurment   
+    createPantMeasur, getPantMeasurment, getPantMeasumentById, updatePantMeasurment, deletePantMeasurment
 }
