@@ -5,7 +5,7 @@ const shirtMeasurValidation = Joi.object({
     chest: Joi.number().required(),
     shoulder: Joi.number().required(),
     sleeve: Joi.number().required(),
-    collor: Joi.number().required(),
+    collar: Joi.number().required(),
     cuff: Joi.number().required(),
     back: Joi.number().required(),
     bicep: Joi.number().required(),

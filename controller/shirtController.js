@@ -105,7 +105,7 @@ const updateShirt = async (req, res) => {
             chest: req.body.chest,
             shoulder: req.body.shoulder,
             sleeve: req.body.sleeve,
-            collor: req.body.collor,
+            collar: req.body.collor,
             cuff: req.body.cuff,
             back: req.body.back,
             bicep: req.body.bicep,
