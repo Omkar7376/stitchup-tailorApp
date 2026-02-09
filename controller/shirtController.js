@@ -21,10 +21,14 @@ const createShirtMeasur = async (req, res) => {
             }
         }
 
+        /*const shirtQnt = shirtData?.shirtQnt || 0;
+        const pantQnt = pantData?.PantQnt || 0;
         const shirtAmount = shirtData?.amount || 0;
         const pantAmount = pantData?.amount || 0;
 
-        const totalAmount = shirtAmount + pantAmount;
+        const shirtTotal = shirtQnt * shirtAmount;
+        const pantTotal = pantQnt * pantAmount;
+        const totalAmount = shirtTotal + pantTotal;
         const discount = order.discount || 0;
         const advance = order.advanceAmount || 0;
         const finalAmount = totalAmount - discount - advance;
@@ -34,8 +38,10 @@ const createShirtMeasur = async (req, res) => {
             orderDate: order.orderDate,
             deliveryDate: order.deliveryDate,
             orderType: order.orderType,
+            shirtQnt: shirtQnt,
+            pantQnt: pantQnt,
             shirtAmount: shirtAmount,
-            pantAmount: pantAmount,
+            pantAmount: pantTotal,
             totalAmount: totalAmount,
             discount: discount,
             advanceAmount: advance,
@@ -43,7 +49,7 @@ const createShirtMeasur = async (req, res) => {
             status: order.status,
             note: order.note
         },
-            { transaction: t })
+            { transaction: t })*/
 
         const shirt = await ShirtMeasur.create({
             ...shirtData,

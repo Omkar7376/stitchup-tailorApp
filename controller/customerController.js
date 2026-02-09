@@ -19,10 +19,10 @@ const createCustomer = async (req, res) => {
 
         const customer = await Customer.create(customerData, { transaction: t })
 
-        const shirtQnt = shirtMeasurement?.shirtQnt || 0;
-        const pantQnt = pantMeasurement?.PantQnt || 0;
-        const shirtUnitPrice = shirtMeasurement?.amount || 0;
-        const pantUnitPrice = pantMeasurement?.amount || 0;
+        const shirtQnt = order?.shirtQnt || 0;
+        const pantQnt = order?.pantQnt || 0;
+        const shirtUnitPrice = order?.shirtAmount || 0;
+        const pantUnitPrice = order?.pantAmount || 0;
 
         const shirtTotal = shirtQnt * shirtUnitPrice;
         const pantTotal = pantQnt * pantUnitPrice;
@@ -36,6 +36,8 @@ const createCustomer = async (req, res) => {
             orderDate: order.orderDate,
             deliveryDate: order.deliveryDate,
             orderType: order.orderType,
+            shirtQnt: shirtQnt,
+            pantQnt: pantQnt,
             shirtAmount: shirtTotal,
             pantAmount: pantTotal,
             totalAmount: totalAmount,
@@ -75,11 +77,9 @@ const createCustomer = async (req, res) => {
                 CUSTOMERID: customer.id,
                 BOOKNO: customer.bookno,
                 NAME: customer.name,
-                AGE: customer.age,
                 GENDER: customer.gender,
                 MOB_NO: customer.mob_num,
                 ADDRESS: customer.address
-
             }],
             order: [{
                 ORDERID: newOrder.id,
@@ -87,8 +87,12 @@ const createCustomer = async (req, res) => {
                 ORDER_DATE: newOrder.orderDate,
                 DELIVERY_DATE: newOrder.deliveryDate,
                 ORDER_TYPE: newOrder.orderType,
+                SHIRT_QNT: newOrder.shirtQnt,
+                PANT_QNT: newOrder.pantQnt,
                 SHIRT_AMOUNT: newOrder.shirtAmount,
                 PANT_AMOUNT: newOrder.pantAmount,
+                SHIRT_TOTAL: shirtTotal,
+                PANT_TOTAL: pantTotal,
                 TOTAL_AMOUNT: newOrder.totalAmount,
                 DISCOUNT: newOrder.discount,
                 ADVANCE_AMOUNT: newOrder.advanceAmount,
@@ -99,7 +103,6 @@ const createCustomer = async (req, res) => {
             shirt: [{
                 SHIRTID: shirt?.id,
                 ORDER_ID: shirt?.orderId,
-                SHIRT_QNT: shirt?.shirtQnt,
                 CHEST: shirt?.chest,
                 LENGTH: shirt?.length,
                 SLEEVE: shirt?.sleeve,
@@ -107,27 +110,21 @@ const createCustomer = async (req, res) => {
                 BACK: shirt?.back,
                 BICEP: shirt?.bicep,
                 CUFF: shirt?.cuff,
-                AMOUNT: shirt?.amount,
                 FRONT1: shirt?.front1,
                 FRONT2: shirt?.front2,
                 FRONT3: shirt?.front3,
-                SHIRT_TOTAL: shirtTotal,
-                UNIT_PRICE: shirtUnitPrice
             }],
             pant: [{
                 PANTID: pant?.id,
                 ORDER_ID: pant?.orderId,
-                PANT_QNT: pant?.pantQnt,
+                OUTSIDE_LENGTH: pant?.outsideLength,
+                INSIDE_LENGTH: pant?.insideLength,
                 RISE: pant?.rise,
                 WAIST: pant?.waist,
                 SEAT: pant?.seat,
-                LENGTH: pant?.length,
                 THIGH: pant?.thigh,
                 BOTTOM: pant?.bottom,
                 KNEE: pant?.knee,
-                AMOUNT: pant?.amount,
-                PANT_TOTAL: pantTotal,
-                UNIT_PRICE: pantUnitPrice
             }]
         });
     } catch (e) {
@@ -145,7 +142,6 @@ const getCustomers = async (req, res) => {
                 ID: c.id,
                 BOOKNO: c.bookno,
                 NAME: c.name,
-                AGE: c.age,
                 GENDER: c.gender,
                 MOB_NO: c.mob_num,
                 ADDRESS: c.address
@@ -182,7 +178,6 @@ const getCustomerById = async (req, res) => {
                     shirtMeasurements.push({
                         SHIRTID: order.shirt.id,
                         ORDER_ID: order.shirt.orderId,
-                        SHIRT_QNT: order.shirt.shirtQnt,
                         CHEST: order.shirt.chest,
                         LENGTH: order.shirt.length,
                         SLEEVE: order.shirt.sleeve,
@@ -191,7 +186,6 @@ const getCustomerById = async (req, res) => {
                         BICEP: order.shirt.bicep,
                         CUFF: order.shirt.cuff,
                         COLLAR: order.shirt.collar,
-                        AMOUNT: order.shirt.amount,
                         FRONT1: order.shirt.front1,
                         FRONT2: order.shirt.front2,
                         FRONT3: order.shirt.front3
@@ -201,7 +195,6 @@ const getCustomerById = async (req, res) => {
                     pantMeasurements.push({
                         PANTID: order.Pant.id,
                         ORDER_ID: order.Pant.orderId,
-                        PANT_QNT: order.Pant.pantQnt,
                         RISE: order.Pant.rise,
                         WAIST: order.Pant.waist,
                         SEAT: order.Pant.seat,
@@ -211,7 +204,6 @@ const getCustomerById = async (req, res) => {
                         KNEE: order.Pant.knee,
                         OUTSIDE_LENGTH: order.Pant.outsideLength,
                         INSIDE_LENGTH: order.Pant.insideLength,
-                        AMOUNT: order.Pant.amount
                     });
                 }
             });
@@ -222,7 +214,6 @@ const getCustomerById = async (req, res) => {
                 ID: customer.id,
                 BOOKNO: customer.bookno,
                 NAME: customer.name,
-                AGE: customer.age,
                 GENDER: customer.gender,
                 MOB_NO: customer.mob_num,
                 ADDRESS: customer.address
@@ -246,7 +237,6 @@ const updateCustomer = async (req, res) => {
 
         await customer.update({
             name: req.body.name,
-            age: req.body.age,
             gender: req.body.gender,
             mob_num: req.body.mob_num,
             address: req.body.address

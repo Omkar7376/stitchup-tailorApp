@@ -4,6 +4,8 @@ const orderValidation = Joi.object({
     orderDate : Joi.date().required(),
     deliveryDate : Joi.date().required(),
     orderType : Joi.string().required(),
+    shirtQnt : Joi.number().optional(),
+    pantQnt : Joi.number().optional(),
     shirtAmount: Joi.number().optional(),
     pantAmount: Joi.number().optional(),
     totalAmount: Joi.number().optional(),

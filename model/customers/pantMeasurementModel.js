@@ -12,12 +12,6 @@ const PantMeasur = sequelize.define(
             type: DataTypes.INTEGER,
             allowNull: true,
         },
-        pantQnt:{
-            type: DataTypes.INTEGER,
-        },
-        amount: {
-            type: DataTypes.FLOAT,
-        },
         outsideLength: {
             type: DataTypes.FLOAT,
         },

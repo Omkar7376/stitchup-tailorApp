@@ -25,6 +25,14 @@ const CustomerOrder = sequelize.define(
             type: DataTypes.STRING,
             defaultValue: "shirt"
         },
+        shirtQnt: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0
+        },
+        pantQnt: {
+            type: DataTypes.INTEGER,
+            defaultValue: 0
+        },
         shirtAmount: { 
             type: DataTypes.FLOAT, 
             defaultValue: 0 

@@ -17,10 +17,6 @@ const Customer = sequelize.define(
             type: DataTypes.STRING,
             allowNull: false,
         },
-        age:{
-            type: DataTypes.INTEGER,
-            allowNull: false,
-        },  
         gender:{
             type: DataTypes.STRING,
             allowNull: false,

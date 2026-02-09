@@ -12,12 +12,6 @@ const ShirtMeasur = sequelize.define(
             type: DataTypes.INTEGER,
             allowNull: true,
         },
-        shirtQnt:{
-            type: DataTypes.INTEGER,
-        },
-        amount: {
-            type: DataTypes.FLOAT,
-        },
         length: {
             type: DataTypes.FLOAT,
         },
