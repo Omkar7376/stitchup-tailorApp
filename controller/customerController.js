@@ -38,8 +38,10 @@ const createCustomer = async (req, res) => {
             orderType: order.orderType,
             shirtQnt: shirtQnt,
             pantQnt: pantQnt,
-            shirtAmount: shirtTotal,
-            pantAmount: pantTotal,
+            shirtAmount: shirtUnitPrice,
+            pantAmount: pantUnitPrice,
+            shirtTotal: shirtTotal,
+            pantTotal: pantTotal,
             totalAmount: totalAmount,
             discount: discount,
             advanceAmount: advance,
@@ -79,7 +81,9 @@ const createCustomer = async (req, res) => {
                 NAME: customer.name,
                 GENDER: customer.gender,
                 MOB_NO: customer.mob_num,
-                ADDRESS: customer.address
+                ADDRESS: customer.address,
+                CREATED_AT: customer.createdAt,
+                UPDATED_AT: customer.updatedAt
             }],
             order: [{
                 ORDERID: newOrder.id,
@@ -144,7 +148,9 @@ const getCustomers = async (req, res) => {
                 NAME: c.name,
                 GENDER: c.gender,
                 MOB_NO: c.mob_num,
-                ADDRESS: c.address
+                ADDRESS: c.address,
+                CREATED_AT: c.createdAt,
+                UPDATED_AT: c.updatedAt
             }))
         });
     } catch (error) {
@@ -216,7 +222,9 @@ const getCustomerById = async (req, res) => {
                 NAME: customer.name,
                 GENDER: customer.gender,
                 MOB_NO: customer.mob_num,
-                ADDRESS: customer.address
+                ADDRESS: customer.address,
+                CREATED_AT: customer.createdAt,
+                UPDATED_AT: customer.updatedAt
             }],
             shirtMeasurements: shirtMeasurements,
             pantMeasurements: pantMeasurements
@@ -251,7 +259,9 @@ const updateCustomer = async (req, res) => {
                 NAME: customer.name,
                 GENDER: customer.gender,
                 MOB_NO: customer.mob_num,
-                ADDRESS: customer.address
+                ADDRESS: customer.address,
+                CREATED_AT: customer.createdAt,
+                UPDATED_AT: customer.updatedAt
             }]
         })
     } catch (error) {

@@ -41,6 +41,14 @@ const CustomerOrder = sequelize.define(
             type: DataTypes.FLOAT, 
             defaultValue: 0 
         },
+        shirtTotal: { 
+            type: DataTypes.FLOAT, 
+            defaultValue: 0
+        },
+        pantTotal: { 
+            type: DataTypes.FLOAT, 
+            defaultValue: 0 
+        },
         totalAmount: { 
             type: DataTypes.FLOAT, 
             defaultValue: 0 
