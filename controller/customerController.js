@@ -249,7 +249,6 @@ const updateCustomer = async (req, res) => {
                 CUSTOMERID: customer.id,
                 BOOKNO: customer.bookno,
                 NAME: customer.name,
-                AGE: customer.age,
                 GENDER: customer.gender,
                 MOB_NO: customer.mob_num,
                 ADDRESS: customer.address
