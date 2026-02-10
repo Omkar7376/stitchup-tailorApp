@@ -206,11 +206,6 @@ const getUsers = async (req, res) => {
             type: QueryTypes.SELECT
         })
 
-        // const usersWithProfile = await User.findAll({
-        //     include: {
-        //         model: Profile, as: "profile"
-        //     }
-        // })
         return res.status(200).json({ users })
     } catch (error) {
         console.error(error)

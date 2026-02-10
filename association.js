@@ -2,7 +2,6 @@ const { Customer } = require("./model/customers/customerModel");
 const { CustomerOrder } = require("./model/customers/ordersModel");
 const { PantMeasur } = require("./model/customers/pantMeasurementModel");
 const { ShirtMeasur } = require("./model/customers/shirtMeasurementModel");
-const { Profile } = require("./model/users/profileModel");
 const { User } = require("./model/users/userModel");
 
 User.hasMany(Customer, {
