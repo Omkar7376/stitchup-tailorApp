@@ -5,7 +5,6 @@ const { ShirtMeasur } = require('../model/customers/shirtMeasurementModel')
 const { CustomerOrder } = require("../model/customers/ordersModel")
 const { PantMeasur } = require("../model/customers/pantMeasurementModel")
 
-
 const createShirtMeasur = async (req, res) => {
     try {
         const customerId = req.params.id
