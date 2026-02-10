@@ -49,14 +49,14 @@ const createPantMeasur = async (req, res) => {
         })
 
         if (existing) {
-            await existing.update(pantData)
+            return res.status(400).json({ message: "Pant Measurement already exists for this customer" })
         } else {
             await PantMeasur.create({
                 ...pantData,
                 customerId: customer.id
             });
         }
-        
+
         return res.status(201).json({
             message: "Pant Measurement created successfully",
             code: 201,

@@ -54,7 +54,7 @@ const createShirtMeasur = async (req, res) => {
         })
 
         if (existing) {
-            await existing.update(shirtData)
+            return res.status(400).json({ message: "Shirt Measurement already exists for this customer" })
         } else {
             await ShirtMeasur.create({
                 ...shirtData,

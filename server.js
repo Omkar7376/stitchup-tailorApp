@@ -25,7 +25,7 @@ const port = process.env.PORT || 5000;
 (async () => {
   try {
     await dbConnection();
-    await sequelize.sync({ force: true });
+    await sequelize.sync();
     console.log("Database synchronized successfully.");
 
     const server = http.createServer(app);

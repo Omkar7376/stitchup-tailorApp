@@ -5,17 +5,6 @@ const { ShirtMeasur } = require("./model/customers/shirtMeasurementModel");
 const { Profile } = require("./model/users/profileModel");
 const { User } = require("./model/users/userModel");
 
-//User
-User.hasOne(Profile, {
-    foreignKey: 'userId',
-    as: "profile"
-});
-
-Profile.belongsTo(User, {
-    foreignKey: 'userId',
-    as: "users"
-});
-
 User.hasMany(Customer, {
     foreignKey: "userId",
     as: "customers"
