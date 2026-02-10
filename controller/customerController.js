@@ -57,7 +57,7 @@ const createCustomer = async (req, res) => {
         if (shirtMeasurement) {
             shirt = await ShirtMeasur.create({
                 ...shirtMeasurement,
-                orderId: newOrder.id
+                customerId: customer.id,
             }, { transaction: t }
             )
         }
@@ -65,7 +65,7 @@ const createCustomer = async (req, res) => {
         if (pantMeasurement) {
             pant = await PantMeasur.create({
                 ...pantMeasurement,
-                orderId: newOrder.id
+                customerId: customer.id,
             }, { transaction: t }
             )
         }
@@ -106,7 +106,7 @@ const createCustomer = async (req, res) => {
             }],
             shirt: [{
                 SHIRTID: shirt?.id,
-                ORDER_ID: shirt?.orderId,
+                CUSTOMER_ID: shirt?.customerId,
                 CHEST: shirt?.chest,
                 LENGTH: shirt?.length,
                 SLEEVE: shirt?.sleeve,
@@ -122,7 +122,7 @@ const createCustomer = async (req, res) => {
             }],
             pant: [{
                 PANTID: pant?.id,
-                ORDER_ID: pant?.orderId,
+                CUSTOMER_ID: pant?.customerId,
                 OUTSIDE_LENGTH: pant?.outsideLength,
                 INSIDE_LENGTH: pant?.insideLength,
                 RISE: pant?.rise,
