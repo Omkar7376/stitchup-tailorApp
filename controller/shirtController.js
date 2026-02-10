@@ -7,11 +7,10 @@ const { PantMeasur } = require("../model/customers/pantMeasurementModel")
 
 
 const createShirtMeasur = async (req, res) => {
-    const t = await sequelize.transaction();
     try {
-        const { customerId, shirtData, pantData, order } = req.body
+        const { customerId, shirtData} = req.body
         const { error } = shirtMeasurValidation.validate(shirtData)
-        if (error) return res.status(400).json(req.body, { transaction: t })
+        if (error) return res.status(400).json({ message: error.details[0].message })
 
         let customer
         if (customerId) {
@@ -53,17 +52,31 @@ const createShirtMeasur = async (req, res) => {
 
         const shirt = await ShirtMeasur.create({
             ...shirtData,
-            orderId: newOrder.id,
             customerId: customer.id,
-        },
-            { transaction: t })
+        });
 
-        await t.commit();
-
-        return res.status(201).json({ customer, shirt, order: newOrder })
+        return res.status(201).json({ 
+            message : "Shirt Measurement created successfully",
+            code: 201,
+            shirt: [{
+                length: shirt.length,
+                chest: shirt.chest,
+                shoulder: shirt.shoulder,
+                sleeve: shirt.sleeve,
+                collor: shirt.collor,
+                cuff: shirt.cuff,
+                back: shirt.back,
+                bicep: shirt.bicep,
+                front1: shirt.front1,
+                front2: shirt.front2,
+                front3: shirt.front3,
+                createdAt: shirt.createdAt,
+                updatedAt: shirt.updatedAt
+            }]
+         })
     } catch (e) {
-        console.error(error)
-        return res.status(500).json({ message: error.message });
+        console.error(e)
+        return res.status(500).json({ message: e.message });
     }
 }
 

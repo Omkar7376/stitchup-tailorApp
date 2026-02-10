@@ -7,11 +7,10 @@ const { where, QueryTypes } = require("sequelize");
 const { ShirtMeasur } = require("../model/customers/shirtMeasurementModel");
 
 const createPantMeasur = async (req, res) => {
-    const t = await sequelize.transaction();
     try {
-        const { customerId, shirtData, pantData, order } = req.body
+        const { customerId, pantData } = req.body
         const { error } = pantMeasurValidation.validate(pantData)
-        if (error) return res.status(400).json(req.body, { transaction: t })
+        if (error) return res.status(400).json({ message: error.details[0].message })
 
         let customer
         if (customerId) {
@@ -21,7 +20,7 @@ const createPantMeasur = async (req, res) => {
             }
         }
 
-        const shirtAmount = shirtData?.amount || 0;
+        /*const shirtAmount = shirtData?.amount || 0;
         const pantAmount = pantData?.amount || 0;
 
         const totalAmount = shirtAmount + pantAmount;
@@ -43,20 +42,30 @@ const createPantMeasur = async (req, res) => {
             status: order.status,
             note: order.note
         },
-            { transaction: t })
+            { transaction: t })*/
 
         const pant = await PantMeasur.create({
             ...pantData,
-            orderId: newOrder.id,
             customerId: customer.id
-        }, { transaction: t })
+        });
 
-        await t.commit();
-
-        return res.status(201).json({ customer, pant, order: newOrder })
+        return res.status(201).json({ 
+            message : "Pant Measurement created successfully",
+            code: 201,
+            pant: [{
+                outsideLength: pant.outsideLength,
+                insideLength: pant.insideLength,
+                rise: pant.rise,
+                waist: pant.waist,
+                seat: pant.seat,
+                thigh: pant.thigh,
+                knee: pant.knee,
+                bottom: pant.bottom
+            }]
+         })
     } catch (e) {
-        console.error(error)
-        return res.status(500).json({ message: error.message });
+        console.error(e)
+        return res.status(500).json({ message: e.message });
     }
 }
 
