@@ -8,16 +8,15 @@ const { PantMeasur } = require("../model/customers/pantMeasurementModel")
 
 const createShirtMeasur = async (req, res) => {
     try {
-        const { customerId, shirtData} = req.body
+        const customerId = req.params.id
+        const { shirtData } = req.body
         const { error } = shirtMeasurValidation.validate(shirtData)
         if (error) return res.status(400).json({ message: error.details[0].message })
 
-        let customer
-        if (customerId) {
-            customer = await Customer.findByPk(customerId)
-            if (!customer) {
-                return res.status(400).json({ message: "Customer not found" })
-            }
+        const customer = await Customer.findByPk(customerId)
+
+        if (!customer) {
+            return res.status(400).json({ message: "Customer not found" })
         }
 
         /*const shirtQnt = shirtData?.shirtQnt || 0;
@@ -52,18 +51,18 @@ const createShirtMeasur = async (req, res) => {
 
         const shirt = await ShirtMeasur.create({
             ...shirtData,
-            customerId: customer.id,
+            customerId: customer.id
         });
 
-        return res.status(201).json({ 
-            message : "Shirt Measurement created successfully",
+        return res.status(201).json({
+            message: "Shirt Measurement created successfully",
             code: 201,
             shirt: [{
                 length: shirt.length,
                 chest: shirt.chest,
                 shoulder: shirt.shoulder,
                 sleeve: shirt.sleeve,
-                collor: shirt.collor,
+                collar: shirt.collar,
                 cuff: shirt.cuff,
                 back: shirt.back,
                 bicep: shirt.bicep,
@@ -73,7 +72,7 @@ const createShirtMeasur = async (req, res) => {
                 createdAt: shirt.createdAt,
                 updatedAt: shirt.updatedAt
             }]
-         })
+        })
     } catch (e) {
         console.error(e)
         return res.status(500).json({ message: e.message });

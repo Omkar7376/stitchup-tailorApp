@@ -8,16 +8,15 @@ const { ShirtMeasur } = require("../model/customers/shirtMeasurementModel");
 
 const createPantMeasur = async (req, res) => {
     try {
-        const { customerId, pantData } = req.body
+        const customerId = req.params.id
+        const { pantData } = req.body
         const { error } = pantMeasurValidation.validate(pantData)
         if (error) return res.status(400).json({ message: error.details[0].message })
 
-        let customer
-        if (customerId) {
-            customer = await Customer.findByPk(customerId)
-            if (!customer) {
-                return res.status(400).json({ message: "Customer not found" })
-            }
+        const customer = await Customer.findByPk(customerId)
+
+        if (!customer) {
+            return res.status(400).json({ message: "Customer not found" })
         }
 
         /*const shirtAmount = shirtData?.amount || 0;
@@ -49,8 +48,8 @@ const createPantMeasur = async (req, res) => {
             customerId: customer.id
         });
 
-        return res.status(201).json({ 
-            message : "Pant Measurement created successfully",
+        return res.status(201).json({
+            message: "Pant Measurement created successfully",
             code: 201,
             pant: [{
                 outsideLength: pant.outsideLength,
@@ -64,7 +63,7 @@ const createPantMeasur = async (req, res) => {
                 createdAt: pant.createdAt,
                 updatedAt: pant.updatedAt
             }]
-         })
+        })
     } catch (e) {
         console.error(e)
         return res.status(500).json({ message: e.message });

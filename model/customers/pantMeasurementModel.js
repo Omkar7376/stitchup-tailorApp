@@ -8,9 +8,9 @@ const PantMeasur = sequelize.define(
             primaryKey: true,
             autoIncrement: true
         },
-        orderId: {
+        customerId: {
             type: DataTypes.INTEGER,
-            allowNull: true,
+            allowNull: false
         },
         outsideLength: {
             type: DataTypes.FLOAT,

@@ -8,9 +8,9 @@ const ShirtMeasur = sequelize.define(
             primaryKey: true,
             autoIncrement: true
         },
-        orderId: {
+        customerId: {
             type: DataTypes.INTEGER,
-            allowNull: true,
+            allowNull: false
         },
         length: {
             type: DataTypes.FLOAT,
