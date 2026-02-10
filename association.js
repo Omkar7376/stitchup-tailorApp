@@ -16,6 +16,16 @@ Profile.belongsTo(User, {
     as: "users"
 });
 
+User.hasMany(Customer, {
+    foreignKey: "userId",
+    as: "customers"
+})
+
+Customer.belongsTo(User, {
+    foreignKey: "userId",
+    as: "user"
+})
+
 //Customer
 Customer.hasMany(CustomerOrder, {
     foreignKey: "customerId",
@@ -27,26 +37,26 @@ CustomerOrder.belongsTo(Customer, {
     as: "customer"
 })
 
-//Shirt Orders
-CustomerOrder.hasOne(ShirtMeasur, {
-    foreignKey: "orderId",
+//Shirt
+Customer.hasOne(ShirtMeasur, {
+    foreignKey: "customerId",
     as: "shirt"
 })
 
-ShirtMeasur.belongsTo(CustomerOrder, {
-    foreignKey: "orderId",
-    as: "order"
+ShirtMeasur.belongsTo(Customer, {
+    foreignKey: "customerId",
+    as: "customer"
 })
 
-//Pant Orders
-CustomerOrder.hasOne(PantMeasur, {
-    foreignKey: "orderId",
+//Pant 
+Customer.hasOne(PantMeasur, {
+    foreignKey: "customerId",
     as: "Pant"
 })
 
-PantMeasur.belongsTo(CustomerOrder, {
-    foreignKey: "orderId",
-    as: "order"
+PantMeasur.belongsTo(Customer, {
+    foreignKey: "customerId",
+    as: "customer"
 })
 
 

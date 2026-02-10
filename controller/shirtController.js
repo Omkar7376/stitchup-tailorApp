@@ -49,10 +49,19 @@ const createShirtMeasur = async (req, res) => {
         },
             { transaction: t })*/
 
-        const shirt = await ShirtMeasur.create({
-            ...shirtData,
-            customerId: customer.id
-        });
+        const existing = await ShirtMeasur.findOne({
+            where: { customerId }
+        })
+
+        if (existing) {
+            await existing.update(shirtData)
+        } else {
+            await ShirtMeasur.create({
+                ...shirtData,
+                customerId: customer.id
+            })
+        }
+
 
         return res.status(201).json({
             message: "Shirt Measurement created successfully",

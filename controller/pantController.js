@@ -43,11 +43,20 @@ const createPantMeasur = async (req, res) => {
         },
             { transaction: t })*/
 
-        const pant = await PantMeasur.create({
-            ...pantData,
-            customerId: customer.id
-        });
 
+        const existing = await PantMeasur.findOne({
+            where: { customerId }
+        })
+
+        if (existing) {
+            await existing.update(pantData)
+        } else {
+            await PantMeasur.create({
+                ...pantData,
+                customerId: customer.id
+            });
+        }
+        
         return res.status(201).json({
             message: "Pant Measurement created successfully",
             code: 201,
