@@ -60,7 +60,9 @@ const createPantMeasur = async (req, res) => {
                 seat: pant.seat,
                 thigh: pant.thigh,
                 knee: pant.knee,
-                bottom: pant.bottom
+                bottom: pant.bottom,
+                createdAt: pant.createdAt,
+                updatedAt: pant.updatedAt
             }]
          })
     } catch (e) {

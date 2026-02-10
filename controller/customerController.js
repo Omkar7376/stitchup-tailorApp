@@ -117,6 +117,8 @@ const createCustomer = async (req, res) => {
                 FRONT1: shirt?.front1,
                 FRONT2: shirt?.front2,
                 FRONT3: shirt?.front3,
+                CREATED_AT: shirt?.createdAt,
+                UPDATED_AT: shirt?.updatedAt
             }],
             pant: [{
                 PANTID: pant?.id,
@@ -129,6 +131,8 @@ const createCustomer = async (req, res) => {
                 THIGH: pant?.thigh,
                 BOTTOM: pant?.bottom,
                 KNEE: pant?.knee,
+                CREATED_AT: pant?.createdAt,
+                UPDATED_AT: pant?.updatedAt
             }]
         });
     } catch (e) {
