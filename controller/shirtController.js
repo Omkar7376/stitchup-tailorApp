@@ -90,8 +90,8 @@ const getShirtMeasument = async (req, res) => {
     try {
         const customer = await Customer.findAll({
             include: {
-                model: CustomerOrder,
-                as: "orders",
+                model: Customer,
+                as: "customer",
                 include: [{
                     model: ShirtMeasur,
                     as: "shirt"
