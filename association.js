@@ -39,7 +39,7 @@ ShirtMeasur.belongsTo(Customer, {
 //Pant 
 Customer.hasOne(PantMeasur, {
     foreignKey: "customerId",
-    as: "Pant"
+    as: "pant"
 })
 
 PantMeasur.belongsTo(Customer, {

@@ -167,56 +167,12 @@ const getCustomerById = async (req, res) => {
     try {
         const customer = await Customer.findByPk(req.params.id, {
             include: [
-                {
-                    association: "orders",
-                    include: [
-                        { association: "shirt" },
-                        { association: "Pant" }
-                    ]
-                }
+                { association: "shirt" },
+                { association: "pant" }
             ]
         })
         if (!customer) {
             return res.status(404).json({ error: "Customer not found" });
-        }
-        const shirtMeasurements = [];
-        const pantMeasurements = [];
-
-        if (customer.orders && customer.orders.length > 0) {
-            customer.orders.forEach(order => {
-                if (order.shirt) {
-                    shirtMeasurements.push({
-                        SHIRTID: order.shirt.id,
-                        ORDER_ID: order.shirt.orderId,
-                        CHEST: order.shirt.chest,
-                        LENGTH: order.shirt.length,
-                        SLEEVE: order.shirt.sleeve,
-                        SHOULDER: order.shirt.shoulder,
-                        BACK: order.shirt.back,
-                        BICEP: order.shirt.bicep,
-                        CUFF: order.shirt.cuff,
-                        COLLAR: order.shirt.collar,
-                        FRONT1: order.shirt.front1,
-                        FRONT2: order.shirt.front2,
-                        FRONT3: order.shirt.front3
-                    });
-                }
-                if (order.Pant) {
-                    pantMeasurements.push({
-                        PANTID: order.Pant.id,
-                        ORDER_ID: order.Pant.orderId,
-                        RISE: order.Pant.rise,
-                        WAIST: order.Pant.waist,
-                        SEAT: order.Pant.seat,
-                        LENGTH: order.Pant.length,
-                        THIGH: order.Pant.thigh,
-                        BOTTOM: order.Pant.bottom,
-                        KNEE: order.Pant.knee,
-                        OUTSIDE_LENGTH: order.Pant.outsideLength,
-                        INSIDE_LENGTH: order.Pant.insideLength,
-                    });
-                }
-            });
         }
 
         return res.status(200).json({
@@ -230,8 +186,34 @@ const getCustomerById = async (req, res) => {
                 CREATED_AT: customer.createdAt,
                 UPDATED_AT: customer.updatedAt
             }],
-            shirtMeasurements: shirtMeasurements,
-            pantMeasurements: pantMeasurements
+            shirtMeasurements: customer.shirt ? [{
+                SHIRTID: customer.shirt.id,
+                CUSTOMER_ID: customer.id,
+                CHEST: customer.shirt.chest,
+                LENGTH: customer.shirt.length,
+                SLEEVE: customer.shirt.sleeve,
+                SHOULDER: customer.shirt.shoulder,
+                BACK: customer.shirt.back,
+                BICEP: customer.shirt.bicep,
+                CUFF: customer.shirt.cuff,
+                COLLAR: customer.shirt.collar,
+                FRONT1: customer.shirt.front1,
+                FRONT2: customer.shirt.front2,
+                FRONT3: customer.shirt.front3
+            }] : [],
+            pantMeasurements: customer.pant ? [{
+                PANTID: customer.pant.id,
+                CUSTOMER_ID: customer.id,
+                RISE: customer.pant.rise,
+                WAIST: customer.pant.waist,
+                SEAT: customer.pant.seat,
+                LENGTH: customer.pant.length,
+                THIGH: customer.pant.thigh,
+                BOTTOM: customer.pant.bottom,
+                KNEE: customer.pant.knee,
+                OUTSIDE_LENGTH: customer.pant.outsideLength,
+                INSIDE_LENGTH: customer.pant.insideLength,
+            }] : []
         })
     } catch (error) {
         console.error(error)
