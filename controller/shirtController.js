@@ -89,15 +89,11 @@ const createShirtMeasur = async (req, res) => {
 const getShirtMeasument = async (req, res) => {
     try {
         const customer = await Customer.findAll({
-            include: {
-                model: Customer,
-                as: "customer",
-                include: [{
-                    model: ShirtMeasur,
-                    as: "shirt"
-                }]
-            },
-        })
+            include: [{
+                model: ShirtMeasur,
+                as: "shirt"
+            }]
+        });
         return res.status(200).json(customer)
     } catch (error) {
         console.error(error)

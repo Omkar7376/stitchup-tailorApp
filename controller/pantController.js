@@ -82,15 +82,11 @@ const createPantMeasur = async (req, res) => {
 const getPantMeasurment = async (req, res) => {
     try {
         const customer = await Customer.findAll({
-            include: {
-                model: Customer,
-                as: "customer",
-                include: [{
-                    model: PantMeasur,
-                    as: "Pant"
-                }]
-            }
-        })
+            include: [{
+                model: PantMeasur,
+                as: "Pant"
+            }]
+        });
         return res.status(200).json(customer)
     } catch (error) {
         console.error(error)
