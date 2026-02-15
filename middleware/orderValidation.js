@@ -8,10 +8,8 @@ const orderValidation = Joi.object({
     pantQnt : Joi.number().optional(),
     shirtAmount: Joi.number().optional(),
     pantAmount: Joi.number().optional(),
-    totalAmount: Joi.number().optional(),
     discount: Joi.number().optional(),
     advanceAmount : Joi.number().optional(),
-    finalPayable : Joi.number().optional(),
     status : Joi.string().optional(),
     note : Joi.string().optional()
 })
