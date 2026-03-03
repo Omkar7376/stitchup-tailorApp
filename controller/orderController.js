@@ -89,6 +89,7 @@ const getOrders = async (req, res) => {
         const orders = await CustomerOrder.findAll({
             include: [{
                 model: Customer,
+                as: 'customer',
                 attributes: ['bookno', 'name', 'mob_num']
             }]
         })
@@ -97,9 +98,9 @@ const getOrders = async (req, res) => {
             orders: orders.map(order => ({
                 ORDERID: order.id,
                 CUSTOMER_ID: order.customerId,
-                BOOKNO: order.Customer?.bookno,
-                CUSTOMER_NAME: order.Customer?.name,
-                MOBILE_NO: order.Customer?.mob_num,
+                BOOKNO: order.customer?.bookno,
+                CUSTOMER_NAME: order.customer?.name,
+                MOBILE_NO: order.customer?.mob_num,
                 ORDER_DATE: order.orderDate,
                 DELIVERY_DATE: order.deliveryDate,
                 ORDER_TYPE: order.orderType,
