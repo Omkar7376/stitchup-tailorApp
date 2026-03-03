@@ -57,6 +57,8 @@ const createOrder = async (req, res) => {
             order: [{
                 ORDERID: newOrder.id,
                 CUSTOMER_ID: newOrder.customerId,
+                CUSTOMERNAME: customer.name,
+                CUSTOMERMOBILE: customer.mob_num,
                 ORDER_DATE: newOrder.orderDate,
                 DELIVERY_DATE: newOrder.deliveryDate,
                 ORDER_TYPE: newOrder.orderType,
@@ -82,4 +84,43 @@ const createOrder = async (req, res) => {
 
 }
 
-module.exports = { createOrder }
+const getOrders = async (req, res) => {
+    try {
+        const orders = await CustomerOrder.findAll({
+            include: [{
+                model: Customer,
+                attributes: ['bookno', 'name', 'mob_num']
+            }]
+        })
+
+        return res.status(200).json({
+            orders: orders.map(order => ({
+                ORDERID: order.id,
+                CUSTOMER_ID: order.customerId,
+                BOOKNO: order.Customer?.bookno,
+                CUSTOMER_NAME: order.Customer?.name,
+                MOBILE_NO: order.Customer?.mob_num,
+                ORDER_DATE: order.orderDate,
+                DELIVERY_DATE: order.deliveryDate,
+                ORDER_TYPE: order.orderType,
+                SHIRT_QNT: order.shirtQnt,
+                PANT_QNT: order.pantQnt,
+                SHIRT_AMOUNT: order.shirtAmount,
+                PANT_AMOUNT: order.pantAmount,
+                SHIRT_TOTAL: order.shirtTotal,
+                PANT_TOTAL: order.pantTotal,
+                TOTAL_AMOUNT: order.totalAmount,
+                DISCOUNT: order.discount,
+                ADVANCE_AMOUNT: order.advanceAmount,
+                FINAL_PAYABLE: order.finalPayable,
+                STATUS: order.status,
+                NOTE: order.note,
+            }))
+        });
+    } catch (e) {
+        console.error(e)
+        return res.status(500).json({ message: e.message });
+    }
+}
+
+module.exports = { createOrder, getOrders }
